@@ -3,6 +3,7 @@ from collections import defaultdict
 
 class VectorClock(object):
     def __init__(self, values):
+        """Initialize a vector clock with a given set of values."""
         self.values = values
 
     def __repr__(self):
@@ -12,11 +13,13 @@ class VectorClock(object):
         return str(self.values)
 
     def increment(self, i):
+        """Increment the vector clock for a specific processor.  Return a new result."""
         new_vals = copy.copy(self.values)
         new_vals[i] += 1
         return VectorClock(new_vals)
 
     def update(self, other):
+        """Compute a new vector clock by computing an element-wise maximum."""
         new_vals = [max(a, b) for a, b in zip(self.values, other.values)]
         return VectorClock(new_vals)
 
@@ -32,6 +35,7 @@ class SmartStop(object):
         self.word_clocks = defaultdict(initial_vector_clock)
 
     def add(self, pid, address, is_write):
+        """Record a memory access."""
         vc = self.processor_clocks[pid]
         vc = vc.increment(pid)
 
@@ -51,5 +55,3 @@ if __name__ == '__main__':
 
     for pid, address, is_write in accesses:
         print '%s %s %s: %s' % (pid, address, is_write, ss.add(pid, address, is_write))
-
-
