@@ -26,7 +26,7 @@ class VectorClock(object):
 class SmartStop(object):
     def __init__(self, n):
         def initial_vector_clock():
-            return VectorClock([-1] * n)
+            return VectorClock([0] * n)
 
         # Vector clock associated with each processor
         self.processor_clocks = [initial_vector_clock()] * n
