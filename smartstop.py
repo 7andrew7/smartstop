@@ -18,7 +18,7 @@ class VectorClock(object):
         new_vals[i] += 1
         return VectorClock(new_vals)
 
-    def update(self, other):
+    def pairwise_maximum(self, other):
         """Compute a new vector clock by computing an element-wise maximum."""
         new_vals = [max(a, b) for a, b in zip(self.values, other.values)]
         return VectorClock(new_vals)
@@ -43,7 +43,7 @@ class SmartStop(object):
             if is_write:
                 self.word_clocks[address] = vc
             else:
-                vc = vc.update(self.word_clocks[address])
+                vc = vc.pairwise_maximum(self.word_clocks[address])
 
         self.processor_clocks[pid] = vc
         return vc
